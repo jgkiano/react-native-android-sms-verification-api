@@ -10,8 +10,10 @@ npm install react-native-android-sms-verification-api
 
 ## Usage
 
+Change your minSdkVersion to 19
+
 ```js
-import AndroidSmsVerificationApi from "react-native-android-sms-verification-api";
+import AndroidSmsVerificationApi from 'react-native-android-sms-verification-api';
 
 // ...
 
