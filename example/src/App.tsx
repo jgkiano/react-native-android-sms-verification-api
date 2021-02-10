@@ -1,18 +1,18 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
-import AndroidSmsVerificationApi from 'react-native-android-sms-verification-api';
+import { StyleSheet, View, Button } from 'react-native';
+import { requestPhoneNumber } from 'react-native-android-sms-verification-api';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    AndroidSmsVerificationApi.multiply(3, 7).then(setResult);
-  }, []);
+  const handleButtonPress = () => {
+    requestPhoneNumber()
+      .then(console.log)
+      .catch((e) => console.log(`${e.code} : ${e.message}`));
+  };
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Button onPress={handleButtonPress} title="Press me" />
     </View>
   );
 }
