@@ -3,10 +3,18 @@ import * as React from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import {
   requestPhoneNumber,
-  SMSRetriever,
+  getAppSignatures,
+  startSmsRetriever,
+  receiveVerificationSMS,
+  startSmsUserConsent,
 } from 'react-native-android-sms-verification-api';
 
 export default function App() {
+  receiveVerificationSMS((error, message) => {
+    console.log(error);
+    console.log(message);
+  });
+
   const handleOnRequestPhoneNumber = () => {
     requestPhoneNumber()
       .then(console.log)
@@ -14,14 +22,15 @@ export default function App() {
   };
 
   const handleOnGetSignatures = () => {
-    SMSRetriever.getAppSignatures().then(console.log).catch(console.log);
+    getAppSignatures().then(console.log).catch(console.log);
   };
 
   const handleOnStartMessageListener = () => {
-    SMSRetriever.startSmsRetriever()
-      .then(() => SMSRetriever.receiveVerificationSMS())
-      .then(console.log)
-      .catch(console.log);
+    startSmsRetriever().then(console.log).catch(console.log);
+  };
+
+  const handleOnStartUserConsentMessageListener = () => {
+    startSmsUserConsent().then(console.log).catch(console.log);
   };
 
   return (
@@ -34,6 +43,10 @@ export default function App() {
       <Button
         onPress={handleOnStartMessageListener}
         title="Start message listener"
+      />
+      <Button
+        onPress={handleOnStartUserConsentMessageListener}
+        title="Start user consent message listener"
       />
     </View>
   );
