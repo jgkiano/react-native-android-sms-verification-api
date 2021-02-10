@@ -1,18 +1,40 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Button } from 'react-native';
-import { requestPhoneNumber } from 'react-native-android-sms-verification-api';
+import {
+  requestPhoneNumber,
+  SMSRetriever,
+} from 'react-native-android-sms-verification-api';
 
 export default function App() {
-  const handleButtonPress = () => {
+  const handleOnRequestPhoneNumber = () => {
     requestPhoneNumber()
       .then(console.log)
       .catch((e) => console.log(`${e.code} : ${e.message}`));
   };
 
+  const handleOnGetSignatures = () => {
+    SMSRetriever.getAppSignatures().then(console.log).catch(console.log);
+  };
+
+  const handleOnStartMessageListener = () => {
+    SMSRetriever.startSmsRetriever()
+      .then(() => SMSRetriever.receiveVerificationSMS())
+      .then(console.log)
+      .catch(console.log);
+  };
+
   return (
     <View style={styles.container}>
-      <Button onPress={handleButtonPress} title="Press me" />
+      <Button
+        onPress={handleOnRequestPhoneNumber}
+        title="Request phone number"
+      />
+      <Button onPress={handleOnGetSignatures} title="Get app signatures" />
+      <Button
+        onPress={handleOnStartMessageListener}
+        title="Start message listener"
+      />
     </View>
   );
 }
