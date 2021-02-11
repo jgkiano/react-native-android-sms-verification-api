@@ -18,31 +18,40 @@ const EmitterMessages = {
   SMS_ERROR: 'SMS_ERROR',
 };
 
+let cb: Callback | null = null;
+
 const AndroidSmsVerificationApi: AndroidSmsVerificationApiType =
   NativeModules.AndroidSmsVerificationApi;
+const eventEmitter = new NativeEventEmitter(
+  NativeModules.AndroidSmsVerificationApi
+);
+const onMessageSuccess = (message: string) => {
+  if (typeof cb === 'function') {
+    cb(null, message);
+  }
+};
+const onMessageError = (error: string) => {
+  if (typeof cb === 'function') {
+    cb(Error(error), null);
+  }
+};
+const startListeners = () => {
+  removeAllListeners();
+  eventEmitter.addListener(EmitterMessages.SMS_RECEIVED, onMessageSuccess);
+  eventEmitter.addListener(EmitterMessages.SMS_ERROR, onMessageError);
+};
+
+export const removeAllListeners = () => {
+  eventEmitter.removeAllListeners(EmitterMessages.SMS_RECEIVED);
+  eventEmitter.removeAllListeners(EmitterMessages.SMS_ERROR);
+};
 
 export const requestPhoneNumber = (requestCode?: number) => {
   return AndroidSmsVerificationApi.requestPhoneNumber(requestCode || 420);
 };
 
 export const receiveVerificationSMS = (callback: Callback) => {
-  const eventEmitter = new NativeEventEmitter(
-    NativeModules.AndroidSmsVerificationApi
-  );
-  const onSuccess = (message: string) => {
-    callback(null, message);
-    removeListeners();
-  };
-  const onError = (error: string) => {
-    callback(Error(error), null);
-    removeListeners();
-  };
-  const removeListeners = () => {
-    eventEmitter.removeAllListeners(EmitterMessages.SMS_RECEIVED);
-    eventEmitter.removeAllListeners(EmitterMessages.SMS_ERROR);
-  };
-  eventEmitter.addListener(EmitterMessages.SMS_RECEIVED, onSuccess);
-  eventEmitter.addListener(EmitterMessages.SMS_ERROR, onError);
+  cb = callback;
 };
 
 export const getAppSignatures = () => {
@@ -50,6 +59,7 @@ export const getAppSignatures = () => {
 };
 
 export const startSmsRetriever = () => {
+  startListeners();
   return AndroidSmsVerificationApi.startSmsRetriever();
 };
 
@@ -57,6 +67,7 @@ export const startSmsUserConsent = (
   senderPhoneNumber?: string,
   userConsentRequestCode?: number
 ) => {
+  startListeners();
   return AndroidSmsVerificationApi.startSmsUserConsent(
     senderPhoneNumber || null,
     userConsentRequestCode || 69
