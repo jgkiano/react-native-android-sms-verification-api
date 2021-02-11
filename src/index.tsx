@@ -36,9 +36,12 @@ const onMessageError = (error: string) => {
   }
 };
 const startListeners = () => {
-  removeAllListeners();
-  eventEmitter.addListener(EmitterMessages.SMS_RECEIVED, onMessageSuccess);
-  eventEmitter.addListener(EmitterMessages.SMS_ERROR, onMessageError);
+  if (!eventEmitter.listeners(EmitterMessages.SMS_RECEIVED).length) {
+    eventEmitter.addListener(EmitterMessages.SMS_RECEIVED, onMessageSuccess);
+  }
+  if (!eventEmitter.listeners(EmitterMessages.SMS_ERROR).length) {
+    eventEmitter.addListener(EmitterMessages.SMS_ERROR, onMessageError);
+  }
 };
 
 export const removeAllListeners = () => {
@@ -52,6 +55,7 @@ export const requestPhoneNumber = (requestCode?: number) => {
 
 export const receiveVerificationSMS = (callback: Callback) => {
   cb = callback;
+  startListeners();
 };
 
 export const getAppSignatures = () => {
@@ -59,7 +63,6 @@ export const getAppSignatures = () => {
 };
 
 export const startSmsRetriever = () => {
-  startListeners();
   return AndroidSmsVerificationApi.startSmsRetriever();
 };
 
@@ -67,7 +70,6 @@ export const startSmsUserConsent = (
   senderPhoneNumber?: string,
   userConsentRequestCode?: number
 ) => {
-  startListeners();
   return AndroidSmsVerificationApi.startSmsUserConsent(
     senderPhoneNumber || null,
     userConsentRequestCode || 69
