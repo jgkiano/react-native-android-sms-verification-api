@@ -45,11 +45,11 @@ export default function App() {
       <Button onPress={handleOnGetSignatures} title="Get app signatures" />
       <Button
         onPress={handleOnStartMessageListener}
-        title="Start message listener"
+        title="Start SMS Retriever Listener"
       />
       <Button
         onPress={handleOnStartUserConsentMessageListener}
-        title="Start user consent message listener"
+        title="Start SMS User Consent Listener"
       />
     </View>
   );
