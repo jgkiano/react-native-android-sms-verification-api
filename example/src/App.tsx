@@ -7,9 +7,12 @@ import {
   startSmsRetriever,
   receiveVerificationSMS,
   startSmsUserConsent,
+  removeAllListeners,
 } from 'react-native-android-sms-verification-api';
 
 export default function App() {
+  React.useEffect(() => removeAllListeners);
+
   receiveVerificationSMS((error, message) => {
     console.log(error);
     console.log(message);
