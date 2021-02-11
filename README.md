@@ -2,6 +2,8 @@
 
 A wrapper for the android sms verification api. Includes SMS Retriever and SMS User Consent
 
+![Preview](https://user-images.githubusercontent.com/9453250/107610908-ccdc3100-6c53-11eb-90b8-2cd2148f9a25.png)
+
 ## Installation
 
 ```sh
