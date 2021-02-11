@@ -1,26 +1,26 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Button, Alert } from 'react-native';
 import {
   requestPhoneNumber,
   getAppSignatures,
   startSmsRetriever,
   receiveVerificationSMS,
   startSmsUserConsent,
-  removeAllListeners,
 } from 'react-native-android-sms-verification-api';
 
 export default function App() {
-  React.useEffect(() => removeAllListeners);
-
   receiveVerificationSMS((error, message) => {
     console.log(error);
     console.log(message);
+    if (message !== null) {
+      showMessage(message);
+    }
   });
 
   const handleOnRequestPhoneNumber = () => {
     requestPhoneNumber()
-      .then(console.log)
+      .then(showMessage)
       .catch((e) => console.log(`${e.code} : ${e.message}`));
   };
 
@@ -34,6 +34,10 @@ export default function App() {
 
   const handleOnStartUserConsentMessageListener = () => {
     startSmsUserConsent().then(console.log).catch(console.log);
+  };
+
+  const showMessage = (message: string) => {
+    Alert.alert('Success!', message, [{ text: 'Okay' }]);
   };
 
   return (
