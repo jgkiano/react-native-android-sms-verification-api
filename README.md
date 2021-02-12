@@ -54,7 +54,6 @@ await startSmsUserConsent();
 await sendVerificationCode(phoneNumber);
 
 // 5. Make sure to remove the listeners after you've successfully retrieved the verification code
-
 removeAllListeners();
 ```
 
@@ -131,7 +130,6 @@ await startSmsRetriever();
 await sendVerificationCode(phoneNumber);
 
 // 5. Make sure to remove the listeners after you've successfully retrieved the verification code
-
 removeAllListeners();
 ```
 
