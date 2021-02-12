@@ -12,17 +12,6 @@ yarn add react-native-android-sms-verification-api
 
 ## Usage
 
-### Prerequisites
-
-This library target android devices >= SDK 19. Make sure you're targeting at-least the same by modifying your `android/build.gradle` file
-
-```gradle
-ext {
-  minSdkVersion = 19
-  ..//
-}
-```
-
 ### Requesting the user's phone number
 
 ```js
@@ -113,6 +102,38 @@ FA+9qCX9VSu
 5. Finally remove this version of the library in your project and include the offical release
 
 `yarn remove react-native-android-sms-verification-api && yarn add react-native-android-sms-verification-api`
+
+#### Usage
+
+```js
+import {
+  requestPhoneNumber,
+  startSmsRetriever,
+  receiveVerificationSMS,
+} from 'react-native-android-sms-verification-api';
+
+// 1. Define a callback that'll receive the message or any errors that occurs
+receiveVerificationSMS((error, message) => {
+  if (error) {
+    // handle error
+  } else {
+    // parse the message to obtain the verification code
+  }
+});
+
+// 2. Get the user's phone number
+const phoneNumber = await requestPhoneNumber();
+
+// 3. Set's up listeners for the incoming message. !Do this before sending the sms!
+await startSmsRetriever();
+
+// 4. Your custom logic for sending a verification code
+await sendVerificationCode(phoneNumber);
+
+// 5. Make sure to remove the listeners after you've successfully retrieved the verification code
+
+removeAllListeners();
+```
 
 ## Contributing
 
