@@ -137,6 +137,10 @@ removeAllListeners();
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
+## Documentation
+
+- [API Reference](https://jgkiano.github.io/react-native-android-sms-verification-api/)
+
 ## License
 
 MIT
