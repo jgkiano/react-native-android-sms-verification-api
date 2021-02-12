@@ -35,7 +35,11 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "sms",
+    "sms verification",
+    "sms retriver",
+    "sms user consent"
   ],
   "repository": "https://github.com/jgkiano/react-native-android-sms-verification-api",
   "author": "Kiano <jgkiano@gmail.com> (https://github.com/jgkiano)",
