@@ -71,7 +71,7 @@ removeAllListeners();
 
 ### Using the SMS Retriever API
 
-The SMS Retriever API requires you to include an 11-character hash string that identifies your app within the SMS body. See message requirements [here](https://developers.google.com/identity/sms-retriever/verify#1_construct_a_verification_message)
+The SMS Retriever API requires you to include a 11-character hash string that identifies your app within the SMS body. See message requirements [here](https://developers.google.com/identity/sms-retriever/verify#1_construct_a_verification_message)
 
 You can retrive the has by following these [steps.](https://developers.google.com/identity/sms-retriever/verify#computing_your_apps_hash_string) Or by using the `getAppSignatures` function that's available within the library.
 
@@ -80,6 +80,7 @@ The `getAppSignatures` function uses the `AppSignatureHelper` [java class](https
 To get started
 
 1. Include the library version with the signature helper
+
    `yarn add https://github.com/jgkiano/react-native-android-sms-verification-api.git#with-signature-helper`
 
 2. Change the minSdkVersion of your app to 19 but modifying the `android/build.gradle` file
