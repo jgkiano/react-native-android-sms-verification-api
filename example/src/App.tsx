@@ -1,18 +1,54 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
-import AndroidSmsVerificationApi from 'react-native-android-sms-verification-api';
+import { StyleSheet, View, Button, Alert } from 'react-native';
+import {
+  requestPhoneNumber,
+  startSmsRetriever,
+  receiveVerificationSMS,
+  startSmsUserConsent,
+} from 'react-native-android-sms-verification-api';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  receiveVerificationSMS((error, message) => {
+    console.log(error);
+    console.log(message);
+    if (message !== null) {
+      showMessage(message);
+    }
+  });
 
-  React.useEffect(() => {
-    AndroidSmsVerificationApi.multiply(3, 7).then(setResult);
-  }, []);
+  const handleOnRequestPhoneNumber = () => {
+    requestPhoneNumber()
+      .then(showMessage)
+      .catch((e) => console.log(`${e.code} : ${e.message}`));
+  };
+
+  const handleOnStartMessageListener = () => {
+    startSmsRetriever().then(console.log).catch(console.log);
+  };
+
+  const handleOnStartUserConsentMessageListener = () => {
+    startSmsUserConsent().then(console.log).catch(console.log);
+  };
+
+  const showMessage = (message: string) => {
+    Alert.alert('Success!', message, [{ text: 'Okay' }]);
+  };
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Button
+        onPress={handleOnRequestPhoneNumber}
+        title="Request phone number"
+      />
+      <Button
+        onPress={handleOnStartMessageListener}
+        title="Start SMS Retriever Listener"
+      />
+      <Button
+        onPress={handleOnStartUserConsentMessageListener}
+        title="Start SMS User Consent Listener"
+      />
     </View>
   );
 }
