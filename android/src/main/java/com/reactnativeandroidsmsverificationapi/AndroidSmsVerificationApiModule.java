@@ -138,17 +138,6 @@ public class AndroidSmsVerificationApiModule extends ReactContextBaseJavaModule 
   }
 
   @ReactMethod
-  public void getAppSignatures (Promise promise) {
-    AppSignatureHelper helper = new AppSignatureHelper(getReactApplicationContext());
-    WritableNativeArray array = new WritableNativeArray();
-    ArrayList<String> signatures = helper.getAppSignatures();
-    for (String signature : signatures) {
-      array.pushString(signature);
-    }
-    promise.resolve(array);
-  }
-
-  @ReactMethod
   public void startSmsRetriever (Promise promise) {
     SmsRetrieverClient client = SmsRetriever.getClient(getReactApplicationContext());
     Task<Void> task = client.startSmsRetriever();

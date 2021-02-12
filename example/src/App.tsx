@@ -3,7 +3,6 @@ import * as React from 'react';
 import { StyleSheet, View, Button, Alert } from 'react-native';
 import {
   requestPhoneNumber,
-  getAppSignatures,
   startSmsRetriever,
   receiveVerificationSMS,
   startSmsUserConsent,
@@ -24,10 +23,6 @@ export default function App() {
       .catch((e) => console.log(`${e.code} : ${e.message}`));
   };
 
-  const handleOnGetSignatures = () => {
-    getAppSignatures().then(console.log).catch(console.log);
-  };
-
   const handleOnStartMessageListener = () => {
     startSmsRetriever().then(console.log).catch(console.log);
   };
@@ -46,7 +41,6 @@ export default function App() {
         onPress={handleOnRequestPhoneNumber}
         title="Request phone number"
       />
-      <Button onPress={handleOnGetSignatures} title="Get app signatures" />
       <Button
         onPress={handleOnStartMessageListener}
         title="Start SMS Retriever Listener"
