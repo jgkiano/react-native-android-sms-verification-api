@@ -61,7 +61,7 @@ removeAllListeners();
 
 The SMS Retriever API requires you to include a 11-character hash string that identifies your app within the SMS body. See message requirements [here](https://developers.google.com/identity/sms-retriever/verify#1_construct_a_verification_message)
 
-You can retrive the has by following these [steps.](https://developers.google.com/identity/sms-retriever/verify#computing_your_apps_hash_string) Or by using the `getAppSignatures` function that's available within the library.
+You can retrive the hash by following these [steps.](https://developers.google.com/identity/sms-retriever/verify#computing_your_apps_hash_string) Or by using the `getAppSignatures` function that's available within the library.
 
 The `getAppSignatures` function uses the `AppSignatureHelper` [java class](https://github.com/googlearchive/android-credentials/blob/master/sms-verification/android/app/src/main/java/com/google/samples/smartlock/sms_verify/AppSignatureHelper.java) and **is not suposed to be included in your application.** For this reason the `getAppSignatures` function is only available on a separate branch of the library.
 
