@@ -1,6 +1,6 @@
 {
   "name": "react-native-android-sms-verification-api",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A wrapper for the Android SMS Verification API. Includes both SMS Retriever for Zero-tap SMS verification and SMS User Consent for the One-tap SMS verification",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
