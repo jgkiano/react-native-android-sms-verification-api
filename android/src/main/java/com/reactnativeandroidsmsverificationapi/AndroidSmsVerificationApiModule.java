@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -85,6 +86,11 @@ public class AndroidSmsVerificationApiModule extends ReactContextBaseJavaModule 
     context.addActivityEventListener(activityEventListener);
     IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
     getReactApplicationContext().registerReceiver(smsVerificationReceiver, intentFilter, SmsRetriever.SEND_PERMISSION, null);
+    if (Build.VERSION.SDK_INT >= 34 && getReactApplicationContext().getApplicationInfo().targetSdkVersion >= 34) {
+      getReactApplicationContext().registerReceiver(smsVerificationReceiver, intentFilter, SmsRetriever.SEND_PERMISSION, null, Context.RECEIVER_EXPORTED);
+    } else {
+      getReactApplicationContext().registerReceiver(smsVerificationReceiver, intentFilter, SmsRetriever.SEND_PERMISSION, null);
+    }
   }
 
   private void handleOnActivityResult (Activity activity, int requestCode, int resultCode, Intent data) {
