@@ -85,7 +85,6 @@ public class AndroidSmsVerificationApiModule extends ReactContextBaseJavaModule 
     this.reactContext = context;
     context.addActivityEventListener(activityEventListener);
     IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
-    getReactApplicationContext().registerReceiver(smsVerificationReceiver, intentFilter, SmsRetriever.SEND_PERMISSION, null);
     if (Build.VERSION.SDK_INT >= 34 && getReactApplicationContext().getApplicationInfo().targetSdkVersion >= 34) {
       getReactApplicationContext().registerReceiver(smsVerificationReceiver, intentFilter, SmsRetriever.SEND_PERMISSION, null, Context.RECEIVER_EXPORTED);
     } else {
