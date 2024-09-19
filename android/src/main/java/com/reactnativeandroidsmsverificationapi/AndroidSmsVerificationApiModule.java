@@ -17,20 +17,18 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.google.android.gms.auth.api.credentials.Credential;
-import com.google.android.gms.auth.api.credentials.Credentials;
-import com.google.android.gms.auth.api.credentials.HintRequest;
+import com.google.android.gms.auth.api.identity.GetPhoneNumberHintIntentRequest;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
-import java.util.ArrayList;
 
 public class AndroidSmsVerificationApiModule extends ReactContextBaseJavaModule {
 
@@ -103,8 +101,12 @@ public class AndroidSmsVerificationApiModule extends ReactContextBaseJavaModule 
     }
     if (requestCode == phoneNumberRequestCode && promise != null) {
       if (resultCode == Activity.RESULT_OK) {
-        Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-        promise.resolve(credential.getId());
+        try {
+          String phoneNumber = Identity.getSignInClient(getReactApplicationContext()).getPhoneNumberFromIntent(data);
+          promise.resolve(phoneNumber);
+        } catch (ApiException e) {
+         promise.reject(e);
+        }
       } else {
         promise.reject(String.valueOf(resultCode), "Unable to retrieve phone number");
       }
@@ -133,13 +135,23 @@ public class AndroidSmsVerificationApiModule extends ReactContextBaseJavaModule 
   public void requestPhoneNumber (int phoneNumberRequestCode, Promise promise) {
     this.promise = promise;
     this.phoneNumberRequestCode = phoneNumberRequestCode;
-    HintRequest request = new HintRequest.Builder().setPhoneNumberIdentifierSupported(true).build();
-    PendingIntent intent = Credentials.getClient(getReactApplicationContext()).getHintPickerIntent(request);
-    try {
-      getCurrentActivity().startIntentSenderForResult(intent.getIntentSender(), phoneNumberRequestCode, null, 0, 0, 0);
-    } catch (Exception e) {
-      promise.reject(e);
-    }
+    GetPhoneNumberHintIntentRequest request = GetPhoneNumberHintIntentRequest.builder().build();
+    SignInClient client = Identity.getSignInClient(getReactApplicationContext());
+    client.getPhoneNumberHintIntent(request).addOnSuccessListener(new OnSuccessListener<PendingIntent>() {
+      @Override
+      public void onSuccess(PendingIntent pendingIntent) {
+        try {
+          getCurrentActivity().startIntentSenderForResult(pendingIntent.getIntentSender(), phoneNumberRequestCode, null, 0, 0, 0);
+        } catch (Exception e) {
+          promise.reject(e);
+        }
+      }
+    }).addOnFailureListener(new OnFailureListener() {
+      @Override
+      public void onFailure(@NonNull Exception e) {
+        promise.reject(e);
+      }
+    });
   }
 
   @ReactMethod
